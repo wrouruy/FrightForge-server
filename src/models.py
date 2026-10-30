@@ -6,8 +6,8 @@ from sqlalchemy.orm import Mapped, mapped_column
 from src.database import Base
 
 class SuitStatus(str, Enum):
-    PENDING = "pending",
-    APPROVED = "approved",
+    PENDING = "pending"
+    APPROVED = "approved"
     REJECTED = "rejected"
 
 class Suit(Base):

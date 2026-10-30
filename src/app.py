@@ -7,7 +7,9 @@ from src.database import engine, Base, get_db
 from src.models import Suit
 
 from src.routers import (
-    generate
+    generate,
+    costumes_get,
+    costumes_post
 )
 
 @asynccontextmanager
@@ -30,5 +32,7 @@ async def root():
 
 router = APIRouter()
 router.add_api_route('/generate', endpoint=generate, methods=['GET'])
+router.add_api_route('/costumes', endpoint=costumes_get, methods=['GET'])
+router.add_api_route('/costumes', endpoint=costumes_post, methods=['POST'])
 
 app.include_router(router)
