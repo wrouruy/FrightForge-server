@@ -1,7 +1,4 @@
 import random
-from fastapi import APIRouter
-
-routers = APIRouter()
 
 adjective_ideas = ['scary', 'terrible', 'ugly', 'sleeping', 'evil', 'furios', 'angry', 'sinister', 'mad']
 creature_ideas  = ['hedgehog', 'wolf', 'scarecrow', 'crow', 'witch', 'bat', 'spider', 'pie']
