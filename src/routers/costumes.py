@@ -3,10 +3,11 @@ import logging
 from fastapi import Depends
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, EmailStr
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.models import Suit
+from src.models import Suit, SuitStatus
 from src.database import get_db
 
 logger = logging.getLogger(__name__)
@@ -19,7 +20,21 @@ class RequestBody(BaseModel):
 
 
 async def costumes_get(session: AsyncSession = Depends(get_db)):
-    pass
+    try:
+        statement = select(Suit).where(Suit.status == SuitStatus.APPROVED)
+        result = await session.execute(statement)
+        suits = result.scalars().all()
+        return JSONResponse(
+            status_code=200,
+            content={'ok': True, 'suits': suits}
+        )
+    except Exception:
+        logger.exception("Unexpected error while getting list of suits")
+
+        return JSONResponse(
+            status_code=500,
+            content={'ok': False, 'message': 'Unknown error occured'},
+        )
 
 
 async def costumes_post(
@@ -39,11 +54,10 @@ async def costumes_post(
 
     except IntegrityError:
         await session.rollback()
-        logger.exception("Failed to insert suit")
 
         return JSONResponse(
             status_code=500,
-            content={'ok': False, 'message': 'DataBase Internal error'},
+            content={'ok': False, 'message': f'The email address "{body.author}" is already taken'},
         )
 
     except Exception:
