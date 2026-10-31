@@ -11,6 +11,7 @@ from src.routers import (
     costumes_get,
     costumes_post
 )
+from src.routers.admin import router as admin_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -36,3 +37,4 @@ router.add_api_route('/costumes', endpoint=costumes_get, methods=['GET'])
 router.add_api_route('/costumes', endpoint=costumes_post, methods=['POST'])
 
 app.include_router(router)
+app.include_router(admin_router)

@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.models import Suit, SuitStatus
 from src.database import get_db
+from src.schemas import SuitOut
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +27,13 @@ async def costumes_get(session: AsyncSession = Depends(get_db)):
         suits = result.scalars().all()
         return JSONResponse(
             status_code=200,
-            content={'ok': True, 'suits': suits}
+            content={
+                'ok': True,
+                'suits': [
+                    SuitOut.model_validate(suit).model_dump(mode='json')
+                    for suit in suits
+                ],
+            }
         )
     except Exception:
         logger.exception("Unexpected error while getting list of suits")
@@ -56,7 +63,7 @@ async def costumes_post(
         await session.rollback()
 
         return JSONResponse(
-            status_code=500,
+            status_code=409,
             content={'ok': False, 'message': f'The email address "{body.author}" is already taken'},
         )
 
