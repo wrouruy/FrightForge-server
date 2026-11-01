@@ -6,6 +6,7 @@ from pydantic import BaseModel, EmailStr
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
+from email_validator import validate_email, EmailNotValidError
 
 from src.models import Suit, SuitStatus
 from src.database import get_db
@@ -17,7 +18,7 @@ class RequestBody(BaseModel):
     adjective: str
     creature: str
     accessory: str
-    author: EmailStr
+    author: str
 
 
 async def costumes_get(session: AsyncSession = Depends(get_db)):
@@ -48,7 +49,26 @@ async def costumes_post(
     body: RequestBody,
     session: AsyncSession = Depends(get_db),
 ):
+    missing_fields = []
+    if not body.adjective:
+        missing_fields.append('adjective')
+    if not body.creature:
+        missing_fields.append('creature')
+    if not body.accessory:
+        missing_fields.append('accessory')
+    if not body.author:
+        missing_fields.append('author')
+
+    if missing_fields:
+        return JSONResponse(
+            status_code=409,
+            content={
+                'ok': False,
+                'message': f'Please fill in the missing fields: {", ".join(missing_fields)}' },
+        )
+
     try:
+        validate_email(body.author, check_deliverability=False)
         new_suit = Suit(
             adjective=body.adjective,
             creature=body.creature,
@@ -65,6 +85,14 @@ async def costumes_post(
         return JSONResponse(
             status_code=409,
             content={'ok': False, 'message': f'The email address "{body.author}" is already taken'},
+        )
+
+    except EmailNotValidError as e:
+        await session.rollback()
+
+        return JSONResponse(
+            status_code=409,
+            content={'ok': False, 'message': f'The email address "{body.author}" is incorrect'},
         )
 
     except Exception:
