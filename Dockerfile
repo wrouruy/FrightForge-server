@@ -6,12 +6,11 @@ WORKDIR /code
 
 ENV PYTHONUNBUFFERED=1
 
-COPY ./pyproject.toml /code/pyproject.toml
-COPY ./uv.lock /code/uv.lock
-COPY ./.env.local /code/.env.local
+COPY pyproject.toml uv.lock ./
 
-RUN uv sync --frozen --no-editable && uv cache clean
+RUN uv sync --frozen --no-editable \
+    && uv cache clean
 
-COPY ./src /code/src
+COPY . .
 
 CMD ["sh", "-c", "uv run uvicorn src.app:app --host 0.0.0.0 --port ${PORT:-8000}"]
