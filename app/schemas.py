@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict
-from src.models import SuitStatus
+from app.models import SuitStatus
 
 class SuitOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)

@@ -3,9 +3,9 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
-from src.routers.admin.dependencies import get_current_admin
-from src.core.jwt import settings_jwt
-from src.core.security import ADMIN_ROLE, create_access_token, verify_admin_credentials
+from app.routers.admin.dependencies import get_current_admin
+from app.core.jwt import settings_jwt
+from app.core.security import ADMIN_ROLE, create_access_token, verify_admin_credentials
 
 logger = logging.getLogger(__name__)
 

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from src.routers.admin.dependencies import get_current_admin
+from app.routers.admin.dependencies import get_current_admin
 
 from . import login, pending_costumes, set_costume_status
 

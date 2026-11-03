@@ -3,8 +3,8 @@ from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-from src.core.jwt import settings_jwt
-from src.core.security import ADMIN_ROLE, decode_access_token
+from app.core.jwt import settings_jwt
+from app.core.security import ADMIN_ROLE, decode_access_token
 
 bearer_scheme = HTTPBearer(auto_error=False)
 

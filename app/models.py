@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import Enum as SQLEnum, ForeignKey, String, TIMESTAMP, func
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.database import Base
+from app.database import Base
 
 class SuitStatus(str, Enum):
     PENDING = "pending"

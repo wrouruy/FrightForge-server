@@ -6,8 +6,8 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.database import get_db
-from src.models import Suit, SuitStatus
+from app.database import get_dbgi
+from app.models import Suit, SuitStatus
 
 logger = logging.getLogger(__name__)
 

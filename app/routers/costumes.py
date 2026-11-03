@@ -8,9 +8,9 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from email_validator import validate_email, EmailNotValidError
 
-from src.models import Suit, SuitStatus
-from src.database import get_db
-from src.schemas import SuitOut
+from app.models import Suit, SuitStatus
+from app.database import get_db
+from app.schemas import SuitOut
 
 logger = logging.getLogger(__name__)
 
